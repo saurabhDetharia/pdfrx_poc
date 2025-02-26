@@ -300,8 +300,20 @@ class _MyHomePageState extends State<MyHomePage> {
     return [
       // To add annotations
       annotationTapWidget,
+
       // List of annotations
       ...annotatedIcons,
+
+      // Static position
+      Positioned(
+        left: 50 * _controller.currentZoom,
+        top: 50 * _controller.currentZoom,
+        child: Container(
+          height: 10 * _controller.currentZoom,
+          width: 10 * _controller.currentZoom,
+          color: Colors.green,
+        ),
+      ),
     ];
   }
 }
