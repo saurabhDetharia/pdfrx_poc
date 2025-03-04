@@ -228,11 +228,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
         tappableIcons.add(
           Positioned(
-            left: localTopLeft!.dx - 30,
-            top: localTopLeft.dy - 5,
+            left: localTopLeft!.dx - (16 * _controller.currentZoom),
+            top: localTopLeft.dy,
             child: GestureDetector(
               onTap: () {},
-              child: Icon(Icons.edit_note_rounded, color: Colors.orange),
+              child: Icon(
+                Icons.square,
+                color: Colors.red,
+                size: 16 * _controller.currentZoom,
+              ),
             ),
           ),
         );
@@ -252,11 +256,18 @@ class _MyHomePageState extends State<MyHomePage> {
         for (final annotation in annotations.value) {
           tappableIcons.add(
             Positioned(
-              left: _controller.localToGlobal(annotation)?.dx,
-              top: _controller.localToGlobal(annotation)?.dy,
+              left: annotation.dx * _controller.currentZoom,
+              top: annotation.dy * _controller.currentZoom,
               child: GestureDetector(
-                onTap: () {},
-                child: Icon(Icons.info, color: Colors.green),
+                behavior: HitTestBehavior.translucent,
+                onLongPressEnd: (d) {
+                  print('test tapped');
+                },
+                child: Icon(
+                  Icons.info,
+                  color: Colors.green,
+                  size: 16 * _controller.currentZoom,
+                ),
               ),
             ),
           );
@@ -283,16 +294,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Disable annotation mode.
                 _isAnnotationModeOn = false;
 
-                // Convert Flutter global => Flutter widget local
-                final localCoordinates = _controller.globalToLocal(
-                  details.localPosition,
-                );
-
                 // Add the coordinates to the list.
                 setState(() {
                   _annotationIcons
                       .putIfAbsent(page.pageNumber, () => [])
-                      .add(localCoordinates!);
+                      .add(details.localPosition / _controller.currentZoom);
                 });
               },
     );
